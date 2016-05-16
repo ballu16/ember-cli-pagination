@@ -21,8 +21,8 @@ export default Ember.Object.extend(SafeGet, {
     var currentPage = this.getInt('currentPage');
     var totalPages = this.getInt('totalPages');
     var showFL = this.get('showFL');
-    
-    var before = parseInt(numPages / 2);    
+
+    var before = parseInt(numPages / 2);
     if ((currentPage - before) < 1 ) {
       before = currentPage - 1;
     }
@@ -39,9 +39,9 @@ export default Ember.Object.extend(SafeGet, {
       }
       if ((totalPages - currentPage - 1) < after) {
         before++;
-      }      
+      }
     }
-    
+
     // add each prior page
     for(var i=before;i>0;i--) {
       var possiblePage = currentPage-i;
@@ -50,7 +50,8 @@ export default Ember.Object.extend(SafeGet, {
       }
     }
 
-    res.push(currentPage);
+    if(currentPage > 0)
+      res.push(currentPage);
 
     // add each following page
     for(i=1;i<=after;i++) {
@@ -75,7 +76,7 @@ export default Ember.Object.extend(SafeGet, {
         }
       }
     }
-    
+
     return res;
 
   }.property("numPagesToShow","currentPage","totalPages")

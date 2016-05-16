@@ -16,12 +16,14 @@ export default Ember.ArrayProxy.extend(Ember.Evented, {
 
   arrangedContent: function() {
     return this.divideObj().objsForPage(this.get('page'));
-  }.property("content.@each", "page", "perPage"),
+  }.property("content.[]", "page", "perPage"),
 
   totalPages: function() {
+    this.set('content.currentPage',1);
     return this.divideObj().totalPages();
-  }.property("content.@each", "perPage"),
-  
+  }.property("content.[]", "perPage"),
+
+
   setPage: function(page) {
     Util.log("setPage " + page);
     return this.set('page', page);
@@ -37,6 +39,10 @@ export default Ember.ArrayProxy.extend(Ember.Evented, {
       this.trigger('invalidPage',{page: page, totalPages: totalPages, array: this});
     }
   }.observes('page','totalPages'),
+
+  notifyContentChanged () {
+    this.set('page',1);
+  },
 
   then: function(success,failure) {
     var content = this.get('content');
@@ -56,3 +62,4 @@ export default Ember.ArrayProxy.extend(Ember.Evented, {
     LockToRange.watch(this);
   }
 });
+

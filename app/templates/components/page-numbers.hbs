@@ -1,35 +1,23 @@
-<div class="pagination-centered">
-  <ul class="pagination">
-    {{#if canStepBackward}}
-      <li class="arrow prev enabled-arrow">
-        <a {{action "incrementPage" -1}}>&laquo;</a>
-      </li>
-    {{else}}
-      <li class="arrow prev disabled">
-        <a {{action "incrementPage" -1}}>&laquo;</a>
-      </li>
-    {{/if}}
-
-    {{#each item in pageItems}}
-      {{#if item.current}}
-        <li class="active page-number">
-          <a>{{item.page}}</a>
-        </li>
-      {{else}}
-        <li class="page-number">
-          <a {{action "pageClicked" item.page}}>{{item.page}}</a>
-        </li>
+<div class="paginationDesign">
+    <ul>
+      {{#if canStepBackward}}
+          <a href="#" {{action "incrementPage" -1}}>&laquo;Previous</a>
       {{/if}}
-    {{/each}}
-
-    {{#if canStepForward}}
-      <li class="arrow next enabled-arrow">
-        <a {{action "incrementPage" 1}}>&raquo;</a>
-      </li>
-    {{else}}
-      <li class="arrow next disabled">
-        <a {{action "incrementPage" 1}}>&raquo;</a>
-      </li>
-    {{/if}}
-  </ul>
+      {{#each item in pageItems}}
+        {{#if item.current}}
+            <a class="active page-number">{{item.page}}</a>
+        {{else}}
+            <a href="#" {{action "pageClicked" item.page}}>{{item.page}}</a>
+        {{/if}}
+      {{/each}}
+      {{#if canStepForward}}
+        {{#if lastPage}}
+            ....
+            <a href="#" {{action "pageClicked" lastPage}}>{{lastPage}}</a>
+        {{/if}}
+      {{/if}}
+      {{#if canStepForward}}
+          <a href="#" {{action "incrementPage" 1}}>Next&raquo;</a>
+      {{/if}}
+    </ul>
 </div>

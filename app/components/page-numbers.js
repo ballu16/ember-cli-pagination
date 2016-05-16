@@ -8,7 +8,6 @@ export default Ember.Component.extend({
   totalPagesBinding: "content.totalPages",
 
   hasPages: Ember.computed.gt('totalPages', 1),
-
   watchInvalidPage: function() {
     var me = this;
     var c = this.get('content');
@@ -18,7 +17,6 @@ export default Ember.Component.extend({
       });
     }
   }.observes("content"),
-
   truncatePages: true,
   numPagesToShow: 10,
 
@@ -42,7 +40,6 @@ export default Ember.Component.extend({
     });
   }.property(),
 
-  //pageItemsBinding: "pageItemsObj.pageItems",
 
   pageItems: function() {
     this.validate();
@@ -51,24 +48,42 @@ export default Ember.Component.extend({
 
   canStepForward: (function() {
     var page = Number(this.get("currentPage"));
+    console.log("current Page"+this.get('currentPage')+"  total Page"+this.get('totalPages'));
     var totalPages = Number(this.get("totalPages"));
+    if(page === 0 && totalPages > 0){
+      page = 1;
+      this.set('currentPage', 1);
+    }
     return page < totalPages;
   }).property("currentPage", "totalPages"),
 
   canStepBackward: (function() {
     var page = Number(this.get("currentPage"));
+    console.log("current Page "+this.get('currentPage'));
     return page > 1;
   }).property("currentPage"),
 
+  lastPage:(function () {
+    console.log('checking inside page-numbers'+" "+this.get('content')+" "+this.get('totalPagesBinding'));
+    var total = this.get('totalPages'),cur = this.get('currentPage');
+    if(total - cur > 10){
+      return this.get('totalPages');
+    }
+    if(total > 10 && cur + 5 <= total){
+      return this.get('totalPages');
+    }
+    return undefined;
+  }).property('currentPage','totalPages','content'),
+
   actions: {
     pageClicked: function(number) {
-      Util.log("PageNumbers#pageClicked number " + number);
+      console.log("PageNumbers#pageClicked number " + number);
       this.set("currentPage", number);
       this.sendAction('action',number);
     },
     incrementPage: function(num) {
       var currentPage = Number(this.get("currentPage")),
-          totalPages = Number(this.get("totalPages"));
+        totalPages = Number(this.get("totalPages"));
 
       if(currentPage === totalPages && num === 1) { return false; }
       if(currentPage <= 1 && num === -1) { return false; }
